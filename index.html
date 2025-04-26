@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>TewDewAI</title>
+		<link rel="stylesheet" href="alpine.css" />
+		<link rel="icon" href="assets/tewdewicon.ico" type="image/x-icon">
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="index.js" defer></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+			defer></script>
+    </head>
+	<body x-data="{ pendingTitle: '', suggestedToDos: [], isThinking: false, currentTitle: '', currentToDos: [], numSubItem: 5 }" class="h-screen">
+		<div class="create-pane">
+			<div class="chat-container h-1/6">
+				<div class="chat-input-container h-1/3 flex items-center mt-4 gap-2 px-2" x-data="{ newMessage: '' }">
+					<input
+						type="text"
+						class="chat-input flex-grow p-2 rounded border"
+						placeholder="Type your task..."
+						x-model="newMessage"
+						@keyup.enter="pendingTitle = ''; pendingTitle = newMessage; isThinking = true; suggestedToDos = await runGet(newMessage, numSubItem); isThinking = false; newMessage=''" />
+					<button
+						class="send-button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+						@click="pendingTitle = ''; pendingTitle = newMessage; isThinking = true; suggestedToDos = await runGet(newMessage, numSubItem); isThinking = false; newMessage=''">
+						Send
+					</button>
+				</div>
+
+				<div class="h-1/2 flex items-center justify-center text-gray-800 text-xl font-bold" x-data>
+					<template x-if="isThinking">
+						<span>Generating ToDos...</span>
+					</template>
+					<template x-if="!isThinking && pendingTitle">
+						<span x-text="pendingTitle"></span>
+					</template>
+				</div>
+			</div>
+			<div x-data="customSlider()" class="w-full max-w-xl p-4 mx-auto">
+				<label class="block mb-2 text-lg font-semibold text-gray-700">Select Value: <span class="text-blue-600" x-text="currentValue"></span></label>
+				
+				<input 
+				  type="range" 
+				  min="0" 
+				  :max="values.length - 1"
+				  x-model="selectedIndex"
+				  
+				  @input="updateValue(); numSubItem = selectedIndex"
+				  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue-500" 
+				/>
+			  
+				<div class="flex justify-between text-xs text-gray-500 mt-2">
+				  <template x-for="(val, index) in values" :key="index">
+					<span x-text="val"></span>
+				  </template>
+				</div>
+			  </div>
+			<div class="todo-proposal-container overflow-y-auto h-full">
+				<div
+					class="add-to-list-btn"
+					@click="createNewToDo(suggestedToDos, pendingTitle); suggestedToDos = []">
+					Add To List
+				</div>
+				<div class="active-proposals h-fit">
+					<template 
+						x-for="(msg, index) in suggestedToDos"
+						:key="index">
+						<div class="sub-to-do" x-data="{ isOn: true }">
+							<!-- Item Title -->
+							<span class="item-title" x-text="msg"></span>
+
+							<!-- Toggle Switch -->
+							<label class="toggle">
+								<input
+									type="checkbox"
+									@click="$store.newActiveList[msg].isOn = !$store.newActiveList[msg].isOn; console.log($store.newActiveList[msg])"
+									x-model="isOn" />
+								<span class="slider"></span>
+							</label>
+							<!-- Display Status -->
+							<span
+								x-text="isOn ? 'Keep' : 'Discard'"
+								class="toggle-status"></span>
+						</div>
+					</template>
+				</div>
+			</div>
+		</div>
+		<div class="todo-pane">
+		<h1 class="todo-header">My ToDo's:</h1>
+		<div class="to-do-main-container">
+				<template x-for="(todo, index) in currentToDos" :key="index">
+					<div class="todo-outer-container" x-data="todo">
+						<div class="todo-container"">
+							<div class="todo-container has-sub-items" x-init="() => {$nextTick(() => loadToDoItems(todo.subItems))
+							}
+							">
+								<button class="todo-checkbox"></button>
+								<p class="todo-title" x-text="todo.title"></p>
+							</div>
+						
+						</div>
+					</div>
+				</template>
+		</div>
+		</div>
+	</body>
+</html>
