@@ -1,12 +1,8 @@
-console.log('hi there')
-// import dotenv from 'dotenv'
 
 const globalSubCountValues = [
 	5, 7, 9, 12, 15, 18, 22, 25, 30, 35, 40, 50, 60, 75, 100,
 ];
 
-const url = Thinking_Url
-console.log(url)
 
 document.addEventListener('DOMContentLoaded', () => {
 	console.log('hi there');
@@ -29,7 +25,8 @@ function logRequest(newMessage) {
 
 async function runGet(message, selectedIndex) {
 	// const url = 'http://127.0.0.1:8787/';
-	const url = env.Thinking_Url
+	const url = 'https://tewdewai.judah-ddd.workers.dev/';
+
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
