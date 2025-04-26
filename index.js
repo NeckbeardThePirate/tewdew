@@ -3,7 +3,7 @@ const globalSubCountValues = [
 ];
 
 const url = env.Thinking_Url
-
+console.log(url)
 
 document.addEventListener('DOMContentLoaded', () => {
 	console.log('hi there');
