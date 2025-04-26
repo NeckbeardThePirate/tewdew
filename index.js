@@ -3,14 +3,50 @@ const globalSubCountValues = [
 	5, 7, 9, 12, 15, 18, 22, 25, 30, 35, 40, 50, 60, 75, 100,
 ];
 
+document.addEventListener('alpine:init', () => {
+	Alpine.data('titleData', () => ({
+		msg: '',
+
+		initializeNewToDo() {
+			this.msg = 'Has been clicked'
+			console.log(this.msg)
+		}
+	}))
+
+	Alpine.data('tewDew', () => ({
+		title: '',
+		subItems: [],
+
+
+		initializeNewToDo() {
+			this.title = 'Has been clicked'
+			console.log(this.msg)
+		},
+
+		applyToDo() {
+
+		}
+	}))
+})
+
 
 document.addEventListener('DOMContentLoaded', () => {
 	console.log('hi there');
 	Alpine.store('newList', {
-		items: [],
+		items: [],	
 	});
 
-	Alpine.store('currentTitle', '');
+
+
+
+
+
+
+
+
+
+
+
 
 	Alpine.store('todos', {
 		hasItems: false,
@@ -18,10 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	const todos = Alpine.store('todos');
 	loadToDoItems(todos);
 });
-
-function logRequest(newMessage) {
-	console.log(newMessage);
-}
 
 async function runGet(message, selectedIndex) {
 	// const url = 'http://127.0.0.1:8787/';
@@ -212,4 +244,8 @@ function customSlider(numSubItems) {
 			numSubItems = this.currentValue;
 		},
 	};
+}
+
+function initNewMessage() {
+	console.log('skip')
 }
