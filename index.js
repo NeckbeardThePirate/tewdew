@@ -4,29 +4,27 @@ const globalSubCountValues = [
 ];
 
 document.addEventListener('alpine:init', () => {
-	Alpine.data('titleData', () => ({
-		msg: '',
-
-		initializeNewToDo() {
-			this.msg = 'Has been clicked'
-			console.log(this.msg)
-		}
-	}))
-
-	Alpine.data('tewDew', () => ({
+	Alpine.store('tewDew', {
 		title: '',
 		subItems: [],
+		isThinking: false,
+		inProgTitle: '',
+		suggestedToDos: [],
+		subItemsIndexPosition: 0,
+		titleEdit: false,
 
-
-		initializeNewToDo() {
-			this.title = 'Has been clicked'
-			console.log(this.msg)
+		async initializeNewToDo() {
+			this.inProgTitle = this.title;
+			this.title = '';
+			this.isThinking = true;
+			this.suggestedToDos = await runGet(this.inProgTitle, this.subItemsIndexPosition);
+			this.isThinking = false;
 		},
 
 		applyToDo() {
 
 		}
-	}))
+	})
 })
 
 
@@ -35,17 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	Alpine.store('newList', {
 		items: [],	
 	});
-
-
-
-
-
-
-
-
-
-
-
 
 
 	Alpine.store('todos', {
@@ -179,13 +166,11 @@ function loadSubItems(levels, item, parentItem, name) {
 			if (!isComplete || isComplete === 'false') {
 				checkButton.classList.add('bg-gray-400')
 				checkButton.setAttribute('is-complete', true)
-				console.log('hello there')
+
 				if (item.hasItems) {
 					const outerContainer = checkButton.parentElement.parentElement.parentElement
-					// const outerContainer = checkButton.parentElement
-					console.log(outerContainer)
 					const subButtons = outerContainer.querySelectorAll('.todo-checkbox')
-					console.log(subButtons)
+
 					subButtons.forEach((button) => {
 						const isComplete = button.getAttribute('is-complete')
 						if (!isComplete) {
@@ -233,15 +218,14 @@ function createToDoBox(item) {
 	parentItem.appendChild(toDoTitle);
 }
 
-function customSlider(numSubItems) {
-	console.log(numSubItems);
+function customSlider() {
 	return {
 		values: globalSubCountValues,
 		selectedIndex: 0,
 		currentValue: 5,
 		updateValue() {
 			this.currentValue = this.values[this.selectedIndex];
-			numSubItems = this.currentValue;
+			return this.currentValue;
 		},
 	};
 }
