@@ -12,35 +12,35 @@
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 			defer></script>
     </head>
-	<body x-data="{ pendingTitle: '', suggestedToDos: [], isThinking: false, currentToDos: [], numSubItem: 0 }" class="h-screen">
-		<div class="create-pane w-1/4" x-data="titleData">
+	<body x-data="{ pendingTitle: '',currentToDos: [], numSubItem: 0}" class="h-screen">
+		<div class="create-pane w-1/4">
 			<!-- <button @click="initializeNewToDo">Click Me</button>
 			<p x-text="msg"></p> -->
 			<div class="chat-container h-1/6">
-				<div class="chat-input-container h-1/3 flex items-center mt-4 gap-2 px-2" x-data="{ newMessage: '' }">
+				<div class="chat-input-container h-1/3 flex items-center mt-4 gap-2 px-2">
 					<input
 						type="text"
 						class="chat-input flex-grow p-2 rounded border"
 						placeholder="Type your task..."
-						x-model="newMessage"
-						@keyup.enter="pendingTitle = '';  initNewMessage(); pendingTitle = newMessage; isThinking = true; suggestedToDos = await runGet(newMessage, numSubItem); isThinking = false; newMessage=''" />
+						x-model="$store.tewDew.title"
+						@keyup.enter="$store.tewDew.initializeNewToDo(); newMessage=''" />
 					<button
 						class="send-button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-						@click="pendingTitle = ''; initNewMessage(); pendingTitle = newMessage; isThinking = true; suggestedToDos = await runGet(newMessage, numSubItem); isThinking = false; newMessage=''">
+						@click="$store.tewDew.initializeNewToDo(); newMessage=''">
 						Send
 					</button>
 				</div>
 
 				<div class="h-2/3 flex items-center justify-center text-gray-800 text-xl font-bold" x-data>
-					<div x-show="isThinking">
+					<div x-show="$store.tewDew.isThinking">
 						<span>Generating ToDos...</span>
 					</div>
-					<div x-show="!isThinking && pendingTitle" x-data="{ isEditing: false }">
+					<div x-show="!$store.tewDew.isThinking" x-data="{ isEditing: false }">
 						<div x-show="!isEditing" @click="isEditing = true" class="hover:cursor-pointer w-full border-none box-border">
-							<span x-text="pendingTitle"></span>
+							<span x-text="$store.tewDew.inProgTitle"></span>
 						</div>
 						<div x-show="isEditing" @click.away="isEditing = false" >
-							<input x-model="pendingTitle" type="text" class="w-full border-2 border-solid text-center rounded-md p-2 m-2 box-border h-auto">
+							<input x-model="$store.tewDew.inProgTitle" type="text" class="w-full border-2 border-solid text-center rounded-md p-2 m-2 box-border h-auto">
 						</div>
 						
 					</div>
@@ -55,7 +55,7 @@
 				  :max="values.length - 1"
 				  x-model="selectedIndex"
 				  
-				  @input="updateValue(); numSubItem = selectedIndex"
+				  @input="$store.tewDew.subItems = updateValue()"
 				  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue-500" 
 				/>
 			  
@@ -68,12 +68,12 @@
 			<div class="todo-proposal-container overflow-y-auto h-full">
 				<div
 					class="add-to-list-btn h-fit p-4 text-xl"
-					@click="createNewToDo(suggestedToDos, pendingTitle); suggestedToDos = []">
+					@click="createNewToDo($store.tewDew.suggestedToDos, $store.tewDew.inProgTitle); $store.tewDew.suggestedToDos = []">
 					Add To List
 				</div>
 				<div class="active-proposals h-fit">
 					<template 
-						x-for="(msg, index) in suggestedToDos"
+						x-for="(msg, index) in $store.tewDew.suggestedToDos"
 						:key="index">
 						<div class="sub-to-do" x-data="{ isOn: true }">
 							<!-- Item Title -->
