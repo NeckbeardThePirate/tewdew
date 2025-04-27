@@ -13,7 +13,7 @@
 			defer></script>
     </head>
 	<body x-data="{ pendingTitle: '', suggestedToDos: [], isThinking: false, currentToDos: [], numSubItem: 5 }" class="h-screen">
-		<div class="create-pane" x-data="titleData">
+		<div class="create-pane w-1/4" x-data="titleData">
 			<!-- <button @click="initializeNewToDo">Click Me</button>
 			<p x-text="msg"></p> -->
 			<div class="chat-container h-1/6">
@@ -67,7 +67,7 @@
 			  </div>
 			<div class="todo-proposal-container overflow-y-auto h-full">
 				<div
-					class="add-to-list-btn"
+					class="add-to-list-btn h-fit p-4 text-xl"
 					@click="createNewToDo(suggestedToDos, pendingTitle); suggestedToDos = []">
 					Add To List
 				</div>
@@ -77,7 +77,7 @@
 						:key="index">
 						<div class="sub-to-do" x-data="{ isOn: true }">
 							<!-- Item Title -->
-							<span class="item-title" x-text="msg"></span>
+							<span class="item-title text-sm" x-text="msg"></span>
 
 							<!-- Toggle Switch -->
 							<label class="toggle">
@@ -85,18 +85,18 @@
 									type="checkbox"
 									@click="$store.newActiveList[msg].isOn = !$store.newActiveList[msg].isOn; console.log($store.newActiveList[msg])"
 									x-model="isOn" />
-								<span class="slider"></span>
+								<span class="slider h-1/2"></span>
 							</label>
 							<!-- Display Status -->
 							<span
 								x-text="isOn ? 'Keep' : 'Discard'"
-								class="toggle-status"></span>
+								class="toggle-status text-sm"></span>
 						</div>
 					</template>
 				</div>
 			</div>
 		</div>
-		<div class="todo-pane">
+		<div class="todo-pane w-3/4">
 		<h1 class="todo-header">My ToDo's:</h1>
 		<div class="to-do-main-container">
 				<template x-for="(todo, index) in currentToDos" :key="index">
