@@ -11,6 +11,9 @@ document.addEventListener('alpine:init', () => {
 		suggestedToDos: [],
 		subItemsIndexPosition: 0,
 		titleEdit: false,
+		subCountValues: [
+			5, 7, 9, 12, 15, 18, 22, 25, 30, 35, 40, 50, 60, 75, 100,
+		],
 
 		async initializeNewToDo() {
 			this.inProgTitle = this.title;
@@ -25,7 +28,7 @@ document.addEventListener('alpine:init', () => {
 		},
 
 		updateValue(selectedIndex) {
-			console.log(selectedIndex)
+			console.log(selectedIndex);
 			this.subItemsIndexPosition = selectedIndex;
 			console.log(this.subItemsIndexPosition);
 			return globalSubCountValues[this.subItemsIndexPosition];
@@ -108,33 +111,15 @@ function loadToDoItems(toDoSet) {
 	if (todos.hasItems) {
 		const toDoItemBox = document.querySelector('.to-do-main-container');
 		for (const item in todos) {
-			// RECURSION TIME BABY
 			if (item !== 'hasItems') {
 				let levels = 0;
-
-				// const outerItem = document.createElement('div');
-				// outerItem.classList.add('todo-outer-container');
 
 				const parentItem = document.createElement('div');
 				parentItem.classList.add('todo-container');
 
-				// const checkButton = document.createElement('button');
-				// checkButton.classList.add('todo-checkbox');
-
-				// const toDoTitle = document.createElement('p');
-				// toDoTitle.classList.add('todo-title');
-				// toDoTitle.textContent = `${item}`
-
-				// if (todos[item].hasItems) {
-				// 	parentItem.classList.add('has-sub-items');
-				// }
-
-				// parentItem.appendChild(checkButton)
-				// parentItem.appendChild(toDoTitle)
 				toDoItemBox.appendChild(parentItem);
 
 				loadSubItems(levels, todos[item], parentItem, item);
-				// toDoItemBox.appendChild(outerItem)
 			}
 		}
 	}
@@ -152,7 +137,6 @@ function loadSubItems(levels, item, parentItem, name) {
 		checkButton.classList.add('todo-checkbox');
 		checkButton.classList.add('size-4');
 		checkButton.classList.add('rounded-sm');
-		// checkButton.classList.add('bg-rose-800');
 
 		const toDoTitle = document.createElement('p');
 		toDoTitle.classList.add('todo-title');
