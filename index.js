@@ -1,4 +1,3 @@
-
 const globalSubCountValues = [
 	5, 7, 9, 12, 15, 18, 22, 25, 30, 35, 40, 50, 60, 75, 100,
 ];
@@ -17,23 +16,29 @@ document.addEventListener('alpine:init', () => {
 			this.inProgTitle = this.title;
 			this.title = '';
 			this.isThinking = true;
-			this.suggestedToDos = await runGet(this.inProgTitle, this.subItemsIndexPosition);
+			console.log(this.subItemsIndexPosition);
+			this.suggestedToDos = await runGet(
+				this.inProgTitle,
+				this.subItemsIndexPosition
+			);
 			this.isThinking = false;
 		},
 
-		applyToDo() {
-
-		}
-	})
-})
-
+		updateValue(selectedIndex) {
+			console.log(selectedIndex)
+			this.subItemsIndexPosition = selectedIndex;
+			console.log(this.subItemsIndexPosition);
+			return globalSubCountValues[this.subItemsIndexPosition];
+		},
+		applyToDo() {},
+	});
+});
 
 document.addEventListener('DOMContentLoaded', () => {
 	console.log('hi there');
 	Alpine.store('newList', {
-		items: [],	
+		items: [],
 	});
-
 
 	Alpine.store('todos', {
 		hasItems: false,
@@ -70,7 +75,6 @@ async function runGet(message, selectedIndex) {
 	Alpine.store('newActiveList', returnable);
 	return toDoArr;
 }
-
 
 function createNewToDo(suggestedToDos, toDoTitle) {
 	console.log(toDoTitle);
@@ -160,32 +164,32 @@ function loadSubItems(levels, item, parentItem, name) {
 		containerItem.appendChild(mainItem);
 
 		checkButton.addEventListener('click', () => {
-			
-			const isComplete = checkButton.getAttribute('is-complete')
-			console.log(isComplete)
+			const isComplete = checkButton.getAttribute('is-complete');
+			console.log(isComplete);
 			if (!isComplete || isComplete === 'false') {
-				checkButton.classList.add('bg-gray-400')
-				checkButton.setAttribute('is-complete', true)
+				checkButton.classList.add('bg-gray-400');
+				checkButton.setAttribute('is-complete', true);
 
 				if (item.hasItems) {
-					const outerContainer = checkButton.parentElement.parentElement.parentElement
-					const subButtons = outerContainer.querySelectorAll('.todo-checkbox')
+					const outerContainer =
+						checkButton.parentElement.parentElement.parentElement;
+					const subButtons =
+						outerContainer.querySelectorAll('.todo-checkbox');
 
 					subButtons.forEach((button) => {
-						const isComplete = button.getAttribute('is-complete')
+						const isComplete = button.getAttribute('is-complete');
 						if (!isComplete) {
-							button.classList.add('bg-gray-400')
-							button.setAttribute('is-complete', true)
+							button.classList.add('bg-gray-400');
+							button.setAttribute('is-complete', true);
 						}
-					})	
+					});
 				}
-				
 			} else {
-				checkButton.classList.remove('bg-gray-400')
-				checkButton.setAttribute('is-complete', false)
-				console.log('hello from the other side')
+				checkButton.classList.remove('bg-gray-400');
+				checkButton.setAttribute('is-complete', false);
+				console.log('hello from the other side');
 			}
-		})
+		});
 
 		if (item.hasItems) {
 			mainItem.classList.add('has-sub-items');
@@ -216,20 +220,4 @@ function createToDoBox(item) {
 
 	parentItem.appendChild(checkButton);
 	parentItem.appendChild(toDoTitle);
-}
-
-function customSlider() {
-	return {
-		values: globalSubCountValues,
-		selectedIndex: 0,
-		currentValue: 5,
-		updateValue() {
-			this.currentValue = this.values[this.selectedIndex];
-			return this.currentValue;
-		},
-	};
-}
-
-function initNewMessage() {
-	console.log('skip')
 }
