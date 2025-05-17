@@ -5,114 +5,154 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>TewDewAI</title>
 		<link rel="stylesheet" href="styles.css" />
-		<link rel="icon" href="assets/tewdewicon.ico" type="image/x-icon">
+		<link rel="icon" href="assets/tewdewicon.ico" type="image/x-icon" />
 		<script src="https://cdn.tailwindcss.com"></script>
 		<script src="index.js" defer></script>
 		<script
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 			defer></script>
-    </head>
-	<body x-data="{ pendingTitle: '',currentToDos: [], numSubItem: 0}" class="h-screen w-screen block sm:flex overflow-y-auto sm:overflow-hidden">
-		<div class="create-pane w-full sm:w-auto min-w-full sm:min-w-[24rem] sm:max-w-[28rem] mx-auto sm:my-2 sm:ml-2 box-border">
-			<!-- <button @click="initializeNewToDo">Click Me</button>
+	</head>
+	<body
+		x-data="{ pendingTitle: '',currentToDos: [], numSubItem: 0}"
+		class="h-screen w-screen flex flex-col">
+<header class="bg-white py-4 px-2 sm:px-8 sm:py-8 shadow">
+  <div class="container mx-auto flex flex-col items-center gap-4">
+    <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-800 relative">
+      TEWDEW AI
+      <span class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 origin-left scale-x-100 transform transition-transform duration-500 group-hover:scale-x-100"></span>
+    </h1>
+    <p class="text-lg md:text-xl font-light text-gray-600 text-center">
+      Breakdown Complex, High Level Tasks Into Smaller Manageable, Bite-Sized Tasks, Using the Power of AI
+    </p>
+  </div>
+</header>
+
+		<div class="flex flex-col sm:flex-row overflow-y-auto sm:overflow-hidden sm:h-auto flex-grow">
+			<div
+				class="create-pane w-full sm:w-auto min-w-full sm:min-w-[24rem] sm:max-w-[28rem] mx-auto sm:my-2 sm:ml-2 box-border">
+				<!-- <button @click="initializeNewToDo">Click Me</button>
 			<p x-text="msg"></p> -->
-			<div class="chat-container h-1/6">
-				<div class="chat-input-container h-1/3 flex items-center mt-4 px-2 w-full">
-					<input
-						type="text"
-						class="chat-input flex-grow p-2 rounded border w-lg"
-						placeholder="Type your task..."
-						x-model="$store.tewDew.title"
-						@keyup.enter="$store.tewDew.initializeNewToDo(); newMessage=''" />
-					<button
-						class="send-button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition w-md"
-						@click="$store.tewDew.initializeNewToDo(); newMessage=''">
-						Send
-					</button>
-				</div>
-
-				<div class="h-2/3 flex items-center justify-center text-gray-800 text-xl font-bold" x-data>
-					<div x-show="$store.tewDew.isThinking">
-						<span>Generating ToDos...</span>
+				<div class="chat-container h-1/6">
+					<div
+						class="chat-input-container h-1/3 flex items-center mt-4 px-2 w-full">
+						<input
+							type="text"
+							class="chat-input flex-grow p-2 rounded border w-lg"
+							placeholder="Type your task..."
+							x-model="$store.tewDew.title"
+							@keyup.enter="$store.tewDew.initializeNewToDo(); newMessage=''" />
+						<button
+							class="send-button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition w-md"
+							@click="$store.tewDew.initializeNewToDo(); newMessage=''">
+							Send
+						</button>
 					</div>
-					<div x-show="!$store.tewDew.isThinking" x-data="{ isEditing: false }">
-						<div x-show="!isEditing" @click="isEditing = true" class="hover:cursor-pointer w-full border-none box-border">
-							<span x-text="$store.tewDew.inProgTitle"></span>
-						</div>
-						<div x-show="isEditing" @click.away="isEditing = false" >
-							<input x-model="$store.tewDew.inProgTitle" type="text" class="w-full border-2 border-solid text-center rounded-md p-2 m-2 box-border h-auto">
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div x-data="customSlider()" class="w-full max-w-xl p-4 mx-auto">
-				<label class="block mb-2 text-lg font-semibold text-gray-700">Select Number of SubItems: <span class="text-blue-600" x-text="currentValue"></span></label>
-				
-				<input 
-				  type="range" 
-				  min="0" 
-				  :max="values.length - 1"
-				  x-model="selectedIndex"
-				  
-				  @input="$store.tewDew.subItems = updateValue()"
-				  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue-500" 
-				/>
-			  
-				<div class="flex justify-between text-xs text-gray-500 mt-2">
-				  <template x-for="(val, index) in values" :key="index">
-					<span x-text="val"></span>
-				  </template>
-				</div>
-			  </div>
-			<div class="todo-proposal-container overflow-y-auto h-fit sm:h-full">
-				<div
-					class="add-to-list-btn h-fit p-4 text-xl"
-					@click="createNewToDo($store.tewDew.suggestedToDos, $store.tewDew.inProgTitle); $store.tewDew.suggestedToDos = []">
-					Add To List
-				</div>
-				<div class="active-proposals h-fit">
-					<template 
-						x-for="(msg, index) in $store.tewDew.suggestedToDos"
-						:key="index">
-						<div class="sub-to-do" x-data="{ isOn: true }">
-							<!-- Item Title -->
-							<span class="item-title text-sm" x-text="msg"></span>
 
-							<!-- Toggle Switch -->
-							<label class="toggle">
+					<div
+						class="h-2/3 flex items-center justify-center text-gray-800 text-xl font-bold"
+						x-data>
+						<div x-show="$store.tewDew.isThinking">
+							<span>Generating ToDos...</span>
+						</div>
+						<div
+							x-show="!$store.tewDew.isThinking"
+							x-data="{ isEditing: false }">
+							<div
+								x-show="!isEditing"
+								@click="isEditing = true"
+								class="hover:cursor-pointer w-full border-none box-border">
+								<span x-text="$store.tewDew.inProgTitle"></span>
+							</div>
+							<div
+								x-show="isEditing"
+								@click.away="isEditing = false">
 								<input
-									type="checkbox"
-									@click="$store.newActiveList[msg].isOn = !$store.newActiveList[msg].isOn; console.log($store.newActiveList[msg])"
-									x-model="isOn" />
-								<span class="slider h-1/2"></span>
-							</label>
-							<!-- Display Status -->
-							<span
-								x-text="isOn ? 'Keep' : 'Discard'"
-								class="toggle-status text-sm"></span>
+									x-model="$store.tewDew.inProgTitle"
+									type="text"
+									class="w-full border-2 border-solid text-center rounded-md p-2 m-2 box-border h-auto" />
+							</div>
 						</div>
-					</template>
+					</div>
+				</div>
+				<div
+					x-data="customSlider()"
+					class="w-full max-w-xl p-4 mx-auto">
+					<label
+						class="block mb-2 text-lg font-semibold text-gray-700"
+						>Select Number of SubItems:
+						<span class="text-blue-600" x-text="currentValue"></span
+					></label>
+
+					<input
+						type="range"
+						min="0"
+						:max="values.length - 1"
+						x-model="selectedIndex"
+						@input="$store.tewDew.subItems = updateValue()"
+						class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue-500" />
+
+					<div
+						class="flex justify-between text-xs text-gray-500 mt-2">
+						<template x-for="(val, index) in values" :key="index">
+							<span x-text="val"></span>
+						</template>
+					</div>
+				</div>
+				<div
+					class="todo-proposal-container overflow-y-auto h-fit sm:h-full">
+					<div
+						class="add-to-list-btn h-fit p-4 text-xl"
+						@click="createNewToDo($store.tewDew.suggestedToDos, $store.tewDew.inProgTitle); $store.tewDew.suggestedToDos = []">
+						Add To List
+					</div>
+					<div class="active-proposals h-fit">
+						<template
+							x-for="(msg, index) in $store.tewDew.suggestedToDos"
+							:key="index">
+							<div class="sub-to-do" x-data="{ isOn: true }">
+								<!-- Item Title -->
+								<span
+									class="item-title text-sm"
+									x-text="msg"></span>
+
+								<!-- Toggle Switch -->
+								<label class="toggle">
+									<input
+										type="checkbox"
+										@click="$store.newActiveList[msg].isOn = !$store.newActiveList[msg].isOn; console.log($store.newActiveList[msg])"
+										x-model="isOn" />
+									<span class="slider h-1/2"></span>
+								</label>
+								<!-- Display Status -->
+								<span
+									x-text="isOn ? 'Keep' : 'Discard'"
+									class="toggle-status text-sm"></span>
+							</div>
+						</template>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="todo-pane w-full sm:w-3/4 box-border ml-0 sm:ml-2">
-		<h1 class="todo-header">My ToDo's:</h1>
-		<div class="to-do-main-container">
-				<template x-for="(todo, index) in currentToDos" :key="index">
-					<div class="todo-outer-container" x-data="todo">
-						<div class="todo-container"">
-							<div class="todo-container has-sub-items" x-init="() => {$nextTick(() => loadToDoItems(todo.subItems))
+			<div class="todo-pane w-full sm:w-3/4 box-border ml-0 sm:ml-2 flex-grow">
+				<h1 class="todo-header">My ToDo's:</h1>
+				<div class="to-do-main-container">
+					<template
+						x-for="(todo, index) in currentToDos"
+						:key="index">
+						<div class="todo-outer-container" x-data="todo">
+							<div class="todo-container"">
+							<div
+								class="todo-container has-sub-items"
+								x-init="() => {$nextTick(() => loadToDoItems(todo.subItems))
 							}
 							">
 								<button class="todo-checkbox"></button>
 								<p class="todo-title" x-text="todo.title"></p>
 							</div>
-						
 						</div>
-					</div>
-				</template>
-		</div>
+					</template>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
+	
