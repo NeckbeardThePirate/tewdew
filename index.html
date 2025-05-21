@@ -22,7 +22,7 @@
       <span class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 origin-left scale-x-100 transform transition-transform duration-500 group-hover:scale-x-100"></span>
     </h1>
     <p class="text-lg md:text-xl font-light text-gray-600 text-center">
-      Breakdown Complex, High Level Tasks Into Smaller Manageable, Bite-Sized Tasks, Using the Power of AI
+      Breakdown complex, high-level tasks into smaller manageable, bite-sized tasks using the power of AI
     </p>
   </div>
 </header>
@@ -77,7 +77,7 @@
 					class="w-full max-w-xl p-4 mx-auto">
 					<label
 						class="block mb-2 text-lg font-semibold text-gray-700"
-						>Select Number of SubItems:
+						>Select number of subitems:
 						<span class="text-blue-600" x-text="currentValue"></span
 					></label>
 
@@ -101,7 +101,7 @@
 					<div
 						class="add-to-list-btn h-fit p-4 text-xl"
 						@click="createNewToDo($store.tewDew.suggestedToDos, $store.tewDew.inProgTitle); $store.tewDew.suggestedToDos = []">
-						Add To List
+						Add To ToDo List
 					</div>
 					<div class="active-proposals h-fit">
 						<template
@@ -131,7 +131,7 @@
 				</div>
 			</div>
 			<div class="todo-pane w-full sm:w-3/4 box-border ml-0 sm:ml-2 flex-grow">
-				<h1 class="todo-header">My ToDo's:</h1>
+				<h1 class="todo-header">My ToDo list:</h1>
 				<div class="to-do-main-container">
 					<template
 						x-for="(todo, index) in currentToDos"
