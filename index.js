@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function runGet(message, selectedIndex) {
 	// const url = 'http://127.0.0.1:8787/';
-	const url = 'https://tewdewai.judah-ddd.workers.dev/';
+	const url = 'https://tewdewai.lightlabs.workers.dev/';
 
 	const response = await fetch(url, {
 		method: 'POST',
